@@ -1,67 +1,105 @@
 from django.shortcuts import render,get_object_or_404,redirect
-
 from django.contrib import messages
 import json
-
 from django.views.generic import ListView , DetailView ,View,TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from .forms import SignUpForm,SignEditForm
 from .models import User
-from stock.models import StockModel
-from product.forms import ProductForm,OrderForm
-from product.forms import StockForm,StockEditForm
-from product.models import Category, Product,Tag, Order
+ 
+class SignUpView(ListView):
+    model = User
+    form_class = SignUpForm
+    template_name = 'registration/signup.html'
 
+    def get(self,request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name,{'form':form})
 
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+
+            user = form.save(commit=False)
+            user.is_active = True #u need to deactivate account till it is confirmed
+            user.save()
+
+            #create_custom_user_profile
+            # Profile.objects.get_or_create(user=user)
+
+            # current_site = get_current_site(request)
+            # site = current_site.domain
+            # subject = 'Activate Your %(site) Account'
+            # message = render_to_string('registration/account_activation_email.html', {
+            #     'user': user,
+            #     'domain': site,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #     'token': account_activation_token.make_token(user),
+            # })
+            # user.email_user(subject, message)
+
+            # messages.success(request, (''))
+            # messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+
+            return redirect('login')
+
+        return render(request, self.template_name, {'form': form})
+
+class HomeView(TemplateView):
+    template_name = 'index.html'
 
 class AdminIndexView(TemplateView):
-    template_name = "mngmnt/index.html"
-    form_class = ProductForm 
+    template_name = "admin/farmers/index.html"
+    # form_class = ProductForm 
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["category"] = Category.objects.all() 
+    #     context["form"] = ProductForm() 
+    #     context["product_list_4"] = Product.objects.all()[:4] 
+    #     context["order_5"] = Order.objects.all()[:7] 
+    #     context["stock_5"] = StockModel.objects.all()[:7] 
+    #     context["tags"] = Tag.objects.all() 
+    #     return context 
+    
+    # def post(self, request, *args, **kwargs):
+    #     form = self.form_class(request.POST,request.FILES)
+    #     if form.is_valid():
+    #         instance = form.save(commit=False)
+    #         instance.author = request.user 
+    #         instance.save()
+    #         return redirect('account:products')
+    #     return redirect('account:dashboard')
+
+class AdminAccountView(CreateView):
+    model = User
+    form_class = SignEditForm
+    template_name = 'admin/farmers/account.html'
+   
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["category"] = Category.objects.all() 
-        context["form"] = ProductForm() 
-        context["product_list_4"] = Product.objects.all()[:4] 
-        context["order_5"] = Order.objects.all()[:7] 
-        context["stock_5"] = StockModel.objects.all()[:7] 
-        context["tags"] = Tag.objects.all() 
+        user = self.get_object()
+        context["form"] = self.form_class(instance=user)
         return context 
-    
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST,request.FILES)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.author = request.user 
-            instance.save()
-            return redirect('account:products')
-        return redirect('account:dashboard')
 
-# class CustomerListView(ListView):
-#     model = User
-#     template_name = "mngmnt/customers.html"
-    
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["category"] = Category.objects.all() 
-#         context["form"] = ProductForm() 
-#         context["object_list_3"] = Product.objects.all()[:3] 
-#         context["tags"] = Tag.objects.all() 
-#         return context 
 
-# class ProductListView(ListView):
-#     model = Product
-#     template_name = "mngmnt/products.html"
-    
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["category"] = Category.objects.all() 
-#         context["form"] = ProductForm() 
-#         context["product_form"] = ProductForm() 
-#         context["object_list_3"] = Product.objects.all()[:3] 
-#         context["tags"] = Tag.objects.all() 
-#         return context 
+class AdminAccountEditView(UpdateView):
+    model = User
+    form_class = SignEditForm
+    template_name = 'admin/farmers/account-edit.html'
+   
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        context["form"] = self.form_class(instance=user)
+        return context 
 
+
+
+
+class AdminAccountDeleteView(DeleteView):
+    pass
+ 
 # class ProductDetailView(DetailView):
 #     model = Product
 #     template_name = "mngmnt/prod_details.html"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User
+from .models import User, Controller
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -20,3 +20,12 @@ class UserAdmin(admin.ModelAdmin):
         
     def deactivate(self, queryset):
         queryset.update(is_active=False)
+
+
+
+@admin.register(Controller)
+class ControllerAdmin(admin.ModelAdmin):
+    list_display = ('name','serialNo', 'client',)
+    search_fields = ('name','serialNo','client__email') 
+ 
+ 

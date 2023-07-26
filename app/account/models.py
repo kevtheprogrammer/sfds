@@ -19,7 +19,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     # username 
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     email = models.EmailField(verbose_name='email address', unique=True)
-    # email_confirmed = models.BooleanField(verbose_name='Email Confirmed', default=False)
     first_name = models.CharField(
         verbose_name='first name', max_length=30, blank=True)
     last_name = models.CharField(verbose_name='last name', max_length=30, blank=True)
@@ -41,7 +40,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'user'
         verbose_name_plural = 'users'
         
-    
+    def get_status(self):
+        if self.is_active:
+            return 'Active'
+        return 'Not Active'
+
     def get_full_name(self):
         '''
         Returns the first_name plus the last_name, with a space in between.
@@ -63,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         # send_mail(subject, message, from_email, [self.email], **kwargs)
     
     def get_absolute_url(self):
-        return reverse('account:edit', args=[self.pk])
+        return reverse('account:profile', args=[self.pk])
 
 
 class Controller(models.Model):
