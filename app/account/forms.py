@@ -19,7 +19,7 @@ class SignUpForm(UserCreationForm):
         ]
 
 
-class SignEditForm(UserCreationForm):
+class UserEditForm(forms.ModelForm):
 
     class Meta:
         model = User
@@ -28,9 +28,19 @@ class SignEditForm(UserCreationForm):
             'email', 
             'first_name', 
             'last_name', 
-            # 'dob', 
+            # 'dob',    
             'nrc', 
             'phone', 
             'location', 
             'country',          
         ]
+
+
+class AddDeviceForm(forms.ModelForm):
+    class Meta:
+        model = Controller
+        fields = [
+            'name',
+            'serialNo',  
+        ]
+

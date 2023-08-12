@@ -17,11 +17,15 @@ My Profile
             <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> View</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{user.get_update_url}}"
+            <a class="nav-link" href="{{user.get_edit_url}}"
               ><i class="bx bx-edit me-1"></i> Update</a
             >
           </li>
-
+          <li class="nav-item">
+            <a class="nav-link" href="{{user.get_sec_url}}"
+              ><i class="bx bx-lock me-1"></i> Security</a
+            >
+          </li>
         </ul>
         <div class="card mb-4">
           <h5 class="card-header">Profile Details</h5>
@@ -33,7 +37,7 @@ My Profile
               src="{{object.avatar.url}}"
               alt="user-avatar"
               class="d-block rounded"
-              height="100"
+              
               width="100"
               id="uploadedAvatar"
               />
@@ -41,7 +45,7 @@ My Profile
               <div class="button-wrapper">
          
                 
-                <p class="text-muted mb-0">Registered Account Details </p>
+                <p class="text-muted mb-0">Registered Account Details for {{object}}</p>
               </div>
             </div>
           </div>

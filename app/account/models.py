@@ -68,6 +68,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse('account:profile', args=[self.pk])
 
+    def get_edit_url(self):
+        return reverse('account:profile-edit', args=[self.pk])
+    
+    def get_soil_url(self):
+        return reverse('account:soil',args=[self.pk])
+    
+
 
 class Controller(models.Model):
     name = models.CharField(verbose_name='name', max_length=30, blank=True)
@@ -75,6 +82,8 @@ class Controller(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(verbose_name='active', default=False)
+ 
 
     def __str__(self):
         return self.name

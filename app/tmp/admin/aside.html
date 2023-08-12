@@ -1,7 +1,9 @@
 
+{% with url_name=request.resolver_match.url_name %}
+
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-      <a href="index.html" class="app-brand-link">
+      <a href="" class="app-brand-link">
        
         <span class="app-brand-text demo menu-text fw-bolder ms-2">SFDS</span>
       </a>
@@ -15,13 +17,7 @@
 
     <ul class="menu-inner py-1">
       <!-- Dashboard -->
-      <li class="menu-item">
-        <a href="" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-home-circle"></i>
-          <div data-i18n="Analytics">Dashboard</div>
-        </a>
-      </li>
-
+ 
       <!-- Layouts -->
       <li class="menu-item active open">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -30,18 +26,18 @@
         </a>
 
         <ul class="menu-sub">
-          <li class="menu-item">
-            <a href="layouts-without-menu.html" class="menu-link">
+          <li class="menu-item {% if url_name == 'soil' %}active{% endif %} ">
+            <a href="{% url 'account:soil' %}" class="menu-link ">
               <div data-i18n="Without menu">Soil</div>
             </a>
           </li>
 
-          <li class="menu-item">
-            <a href="layouts-container.html" class="menu-link">
+          <li class="menu-item {% if url_name == 'devices' %}active{% endif %} ">
+            <a href="{% url 'account:devices' %}" class="menu-link">
               <div data-i18n="Container">Devices</div>
             </a>
           </li>
-          <li class="menu-item">
+          <li class="menu-item  {% if url_name == 'profile' %}active{% endif %} ">
             <a href="{{user.get_absolute_url}}" class="menu-link">
               <div data-i18n="Without navbar">Account</div>
             </a>
@@ -56,8 +52,7 @@
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Need Help</span></li>
       <li class="menu-item">
         <a
-          href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-          target="_blank"
+          href=""
           class="menu-link"
         >
           <i class="menu-icon tf-icons bx bx-support"></i>
@@ -66,8 +61,7 @@
       </li>
       <li class="menu-item">
         <a
-          href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-          target="_blank"
+          href=""
           class="menu-link"
         >
           <i class="menu-icon tf-icons bx bx-file"></i>
@@ -77,3 +71,4 @@
     </ul>
   </aside>
   <!-- / Menu -->
+  {% endwith %}

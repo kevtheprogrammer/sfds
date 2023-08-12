@@ -18,11 +18,8 @@ class SoilNutrient(models.Model):
     
     
     def __str__(self):
-        return self.title
+        return self.name
 
-    def get_absolute_url(self):
-        return reverse('land:soil_detail',args=[self.pk])
-    
 
 class RecommendedPlant(models.Model):
     imagev  = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100)
